@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const backendUrl = window.backendUrl || 'https://default-backend-url.com'; // 기본값 설정 가능
+
   let mediaRecorder;
   let audioChunks = [];
   let audioBlob;
-
   // socket.io 초기화
   const socket = io();
 
@@ -155,6 +156,26 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("마이크에 접근할 수 없습니다. 마이크가 연결되어 있는지 확인하고, 브라우저에서 마이크 접근 권한을 허용했는지 확인하세요.");
     }
   };
+
+  document.getElementById("upload-button").addEventListener("click", () => {
+    const fileInput = document.getElementById("audio-file-input");
+    fileInput.click();
+
+    fileInput.onchange = async () => {
+      const file = fileInput.files[0];
+      if (file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        // Convert to WAV
+        const wavBuffer = audioBufferToWav(audioBuffer);
+        const wavBlob = new Blob([wavBuffer], { type: 'audio/wav' });
+
+        uploadAudio(wavBlob);
+      }
+    };
+  });
 
   // 나머지 클라이언트 코드
   document.getElementById("start-button").addEventListener("click", function () {

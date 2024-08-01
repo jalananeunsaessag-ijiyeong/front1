@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>♥ 포유와 함께하는 상담 ♥</title>
+  <title>♥포유와 함께하는 상담</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
+  <script>
+    window.backendUrl = `${BACKEND_URL}`; // Netlify 빌드 시 환경 변수를 삽입합니다.
+  </script>
 </head>
+<body>
 <body>
   <div class="title-container" id="title1">
     <div class="emoji-container">
@@ -38,6 +42,8 @@
       <input type="text" id="user-message" placeholder="메시지를 입력하세요..." />
       <button id="send-button">전송</button>
       <button id="mic-button">🎤</button>
+      <input type="file" id="audio-file-input" accept="audio/*" style="display: none;">
+      <button id="upload-button">STT 실행</button>
     </div>
   </div>
   <div class="end-button-container hidden" id="end-button-container">
