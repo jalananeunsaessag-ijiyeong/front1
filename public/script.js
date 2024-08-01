@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const backendUrl = window.backendUrl || 'https://port-0-back-lzb6zu1zf3023b1d.sel4.cloudtype.app';
-
+  const backendUrl = window.backendUrl || 'http://52.79.101.165:8080';
   let mediaRecorder;
   let audioChunks = [];
   let audioBlob;
