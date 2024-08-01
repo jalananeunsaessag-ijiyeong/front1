@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const backendUrl = window.backendUrl || 'https://default-backend-url.com'; // 기본값 설정 가능
+  const backendUrl = window.backendUrl || 'https://port-0-back-lzb6zu1zf3023b1d.sel4.cloudtype.app/';
 
   let mediaRecorder;
   let audioChunks = [];
   let audioBlob;
   // socket.io 초기화
-  const socket = io();
+  const socket = io(backendUrl);
 
   document.getElementById("mic-button").addEventListener("click", async () => {
     if (mediaRecorder && mediaRecorder.state === "recording") {
@@ -235,18 +235,36 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
   
       // 서버로 메시지 전송
-      socket.emit("chat message", userMessage);
+      fetch(`${backendUrl}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const botMessageDiv = document.createElement("div");
+        botMessageDiv.classList.add("message", "bot-message");
+        botMessageDiv.textContent = data.reply;
+
+        document.getElementById("chat-box").appendChild(botMessageDiv);
+        document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
     }
   }
-  
+
   socket.on("bot message", function (msg) {
     const botMessageDiv = document.createElement("div");
     botMessageDiv.classList.add("message", "bot-message");
-  
+
     console.log("Received bot message:", msg); // 디버그 메시지 출력
     botMessageDiv.textContent = msg; // 원본 메시지를 표시
-  
+
     document.getElementById("chat-box").appendChild(botMessageDiv);
     document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
-  });  
+  });
 });

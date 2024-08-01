@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
   <script>
-    window.backendUrl = `${BACKEND_URL}`; // Netlify 빌드 시 환경 변수를 삽입합니다.
+    window.backendUrl = '{{ process.env.BACKEND_URL }}';
   </script>
 </head>
 <body>
